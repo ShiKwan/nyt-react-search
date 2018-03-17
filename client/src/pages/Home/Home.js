@@ -20,8 +20,9 @@ class Home extends Component {
         console.log("startYear: " + this.state.startYear);
         console.log("endYear: " + this.state.endYear);
         API.getNews(this.state.title, this.state.startYear, this.state.endYear).then( res => {
+            console.log("articles", res.data.response.docs);
             this.setState({article : res.data.response.docs});
-            console.log("articles", this.state.article);
+            
         });
             
     };
@@ -57,7 +58,16 @@ class Home extends Component {
                     <FormBtn onClick={this.handleForSearch}>Search</FormBtn>
                 <FormBtn>Clear Results</FormBtn>
             </form>
-            <Card />
+            {this.state.article.map(item => 
+                <Card 
+                    key={item.headline.print_headline} 
+                    title={item.headline.print_headline} 
+                    date={item.pub_date} 
+                    teaser={item.snippet} 
+                    link={item.web_url} 
+                    /> 
+            )}
+
         </div>
     )};
 };
