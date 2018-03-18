@@ -15,10 +15,6 @@ class Home extends Component {
     }; 
     handleForSearch = event =>{
         event.preventDefault();
-        console.log("in handleforsearch");
-        console.log("title: " + this.state.title);
-        console.log("startYear: " + this.state.startYear);
-        console.log("endYear: " + this.state.endYear);
         API.getNews(this.state.title, this.state.startYear, this.state.endYear).then( res => {
             console.log("articles", res.data.response.docs);
             this.setState({article : res.data.response.docs});
@@ -34,6 +30,21 @@ class Home extends Component {
         console.log(this.state);
     };
     
+    handleFormSubmit = event => {
+        event.preventDefault();
+        if (this.state.title && this.state.teaser && this.state.endYear && this.state.startYear && this.state.date) {
+            API.saveArticle({
+                title: this.state.title,
+                teaser: this.state.teaser,
+                endYear : this.state.endYear,
+                startYear : this.state.startYear,
+                date : this.state.date
+            })
+                .then(res => this.loadArticles())
+                .catch(err => console.log(err));
+        }
+    };
+
     render(){
         return(
         <div>
