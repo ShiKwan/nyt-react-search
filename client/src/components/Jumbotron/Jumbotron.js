@@ -3,16 +3,16 @@ import './Jumbotron.css';
 import Background from './images/nyt_banner.png';
 
 var jumbotronStyle = {
-  backgroundSize : `cover`,
+  backgroundSize : `contain`,
   backgroundRepeat : `no-repeat`,
   backgroundPosition : `center`,
-  height: 300,
+  height: 500,
   clear: `both`,
   backgroundImage: `url(${Background})`
 }
 
 const Jumbotron = ({ children }) => (
-  <div style={jumbotronStyle} className="jumbotron">
+  <div style={jumbotronStyle} className="jumbotron container">
     {children}
   </div>
 );
