@@ -119,10 +119,10 @@ class Home extends Component {
         return(
         <div>
             <Jumbotron>
-                <h1>NYT News React</h1>
+                
             </Jumbotron>
             {this.state.message ? <MsgCenter msg={this.state.message} className="text-center alert alert-danger" /> : ""}
-            <form>
+            <form className="container">
                 <b>Search Term:</b>
                 <Input onChange={this.handleChange} name='title' value={this.state.title}>
                     
@@ -139,37 +139,39 @@ class Home extends Component {
                     <FormBtn onClick={this.handleForSearch}>Search</FormBtn>
                     <FormBtn onClick={() => this.handleClearResult}>Clear Results</FormBtn>
             </form>
-            {this.state.article.length > 0? <h1>News</h1> : ""}
-            {this.state.article.map(item => 
-                <Card 
-                    key={item._id}
-                    id={item._id}
-                    title={item.headline.main} 
-                    h1="News"
-                    article = 'new'
-                    date={item.pub_date} 
-                    teaser={item.snippet} 
-                    link={item.web_url} 
-                    handleSubmit = {this.handleFormSubmit}
-                    /> 
-            )}
-            {this.state.saved.length > 0 ? <h1>Saved Articles</h1> : ""}
-            {this.state.saved.map(item =>
-                <Card
-                    key={item._id}
-                    id={item._id}
-                    article = 'saved'
-                    h1="Saved Articles"
-                    title={item.title}
-                    date={item.date}
-                    link = {item.link}
-                    teaser= {item.teaser}
-                    savedNotes = {item.note}
-                    onChange = {this.handleChange}
-                    handleNewNote = {this.handleNewNote}
-                    handleDelete={this.handleDelete} />
+            <div className="container">
+                {this.state.article.length > 0? <h1>News</h1> : ""}
+                {this.state.article.map(item => 
+                    <Card 
+                        key={item._id}
+                        id={item._id}
+                        title={item.headline.main} 
+                        h1="News"
+                        article = 'new'
+                        date={item.pub_date} 
+                        teaser={item.snippet} 
+                        link={item.web_url} 
+                        handleSubmit = {this.handleFormSubmit}
+                        /> 
+                )}
+                {this.state.saved.length > 0 ? <h1>Saved Articles</h1> : ""}
+                {this.state.saved.map(item =>
+                    <Card
+                        key={item._id}
+                        id={item._id}
+                        article = 'saved'
+                        h1="Saved Articles"
+                        title={item.title}
+                        date={item.date}
+                        link = {item.link}
+                        teaser= {item.teaser}
+                        savedNotes = {item.note}
+                        onChange = {this.handleChange}
+                        handleNewNote = {this.handleNewNote}
+                        handleDelete={this.handleDelete} />
 
-            )}
+                )}
+            </div>
         </div>
     )};
 };
