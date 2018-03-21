@@ -1,157 +1,144 @@
 import React, {Component} from "react";
+import ReactDOM from 'react-dom';
 import API from "../../utils/API";
 import MsgCenter from "../../components/msgCenter";
 import Jumbotron from "../../components/Jumbotron";
 import Card from "../../components/Card";
 import { Input, FormBtn, DropDownList} from "../../components/Form";
-import Layout from "../../components/Layout";
 import openSocket from 'socket.io-client';
 
+const socket = openSocket();
 
-const socket = openSocket('/');
 class Home extends Component {
-    constructor(props){
-        super(props);
-        socket.on("alertEveryone", message => {
+    constructor(){
+        super()
+        socket.on("saved", message => {
+            console.log(message);
+        });
+        socket.on("scraped", message => {
             console.log(message);
         })
-
-    }
+    };
+    
     state = {
-        article :[],
+        article: [],
         saved: [],
         _id: "",
         title: "",
         date: "",
         teaser: "",
-        note : "",
+        note: "",
         startYear: "",
         endYear: "",
-        message : "",
-        
-    }; 
+        message: "",
+    };
 
-    handleForSearch = event =>{
+    handleForSearch = event => {
         event.preventDefault();
-        if(!this.state.title) {
+        if (!this.state.title) {
             console.log("title cannot be empty");
         }
-        if(!this.state.endYear){
+        if (!this.state.endYear) {
             console.log("end year is empty");
         }
-        if(!this.state.startYear){
+        if (!this.state.startYear) {
             console.log("start year is empty)");
         }
         if (this.state.title) {
-            socket.emit('articleSaved', { "user": "SK", "title": "article found!" });
-            API.getNews(this.state.title, this.state.startYear, this.state.endYear).then( res => {
-            console.log("articles", res.data.response.docs);
-                
-            this.setState({ article: res.data.response.docs });
-            });             
-        }else{
-            this.setState({message : "Title cannot be empty"});
+            socket.emit('scraped', {"title" : this.state.title})
+            API.getNews(this.state.title, this.state.startYear, this.state.endYear).then(res => {
+                console.log("articles", res.data.response.docs);
+
+                this.setState({ article: res.data.response.docs });
+            });
+        } else {
+            this.setState({ message: "Title cannot be empty" });
         }
-        /* const obj = {
-            title : this.state.title,
-            startYear : this.state.startYear,
-            endYear : this.state.endYear
-        }
-        API.getNews2(obj).then( res => {
-            console.log("success with second option!");
-            console.log(res);
-            this.setState({article: res.data.response.docs});
-        })
-        .catch(err => {
-            console.log(err);
-        }) */
-            
     };
-    componentDidMount(){
-        this.loadArticle();
-    }
+
     handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         console.log(event.target.name);
         console.log(event.target.value);
-        this.setState({ [name] : value});
+        this.setState({ [name]: value });
         console.log(this.state);
     };
     loadArticle = () => {
         console.log("getting articles");
         API.getArticles()
-        .then( res => {
-            console.log("load article", res);
-            this.setState({ saved: res.data, title: "", endYear: "", startYear: "", date: "", teaser: "", message: "" });
-        })
-        .catch(err => console.log(err))
+            .then(res => {
+                console.log("load article", res);
+                this.setState({ saved: res.data, title: "", endYear: "", startYear: "", date: "", teaser: "", message: "" });
+            })
+            .catch(err => console.log(err))
     };
     handleFormSubmit = id => {
-       const article = this.state.article.find((item) => item._id === id);
-       console.log("article found! ", article);
-       const newArticle = {
-           title: article.headline.main,
-           date: article.pub_date,
-           teaser: article.snippet,
-           link : article.web_url
-       }
-       console.log("New article: " , newArticle);
-       API.saveArticle(newArticle)
-           .then( () => {
-               this.setState({
-                   message: "Article has been saved!",
-                   article: [],
-                   title: "",
-                   endYear: "",
-                   startYear: ""
-
-               })
-               setTimeout(() => {
-                   this.loadArticle()                   
-               }, 2000);
+        const article = this.state.article.find((item) => item._id === id);
+        console.log("article found! ", article);
+        const newArticle = {
+            title: article.headline.main,
+            date: article.pub_date,
+            teaser: article.snippet,
+            link: article.web_url
+        }
+        console.log("New article: ", newArticle);
+        API.saveArticle(newArticle)
+            .then(() => {
+                socket.emit('saved', { "title": newArticle.title });
+                this.setState({
+                    message: "Article has been saved!",
+                    article: [],
+                    title: "",
+                    endYear: "",
+                    startYear: ""
+                })
+                setTimeout(() => {
+                    this.loadArticle()
+                }, 2000);
             });
     };
     handleDelete = id => {
         console.log("here");
         API.deleteArticle(id)
-            .then(res => { 
+            .then(res => {
                 console.log(res);
                 this.setState({
                     message: "Saved article has been removed from the list."
                 })
                 setTimeout(() => {
-                    this.loadArticle();    
+                    this.loadArticle();
                 }, 2000);
             })
-        .catch(err => console.log(err))
+            .catch(err => console.log(err))
     };
     handleClearResult = (event) => {
         event.preventDefault();
         this.setState({
-            article : [],
-            title : "",
-            endYear : "",
-            startYear : ""
+            article: [],
+            title: "",
+            endYear: "",
+            startYear: ""
         });
-    }
-    handleNewNote = (id,event) => {
+    };
+    handleNewNote = (id, event) => {
         event.preventDefault();
         console.log("handling new note");
         API.saveNote(id, {
-            note : this.state.note,
-            date : Date().Now
+            note: this.state.note,
+            date: Date().Now
         })
-        .then(res =>{
-            console.log(res);
-            this.loadArticle();
-        })
-    }
-    loadNote = () => {}
-
+            .then(res => {
+                console.log(res);
+                this.loadArticle();
+            })
+    };
+    componentDidMount(){
+        this.loadArticle();
+    };
+    
     render(){
         return(
         <div>
-            <Layout />
             <Jumbotron>
                 
             </Jumbotron>

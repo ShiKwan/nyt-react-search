@@ -5,24 +5,31 @@ import SaveBtn from '../../components/SaveBtn';
 import {Input, FormBtn} from '../../components/Form';
 
 const Card = props => (
-    <div style={{clear: "both" }} className="card container-fluid">
+    <div style={{clear: "both", paddingBottom : "20px" }} className="card container-fluid">
         {/*<img className="card-img-top" src={props.image} alt={props.title} /> */}
         <div className='card-body'>
-            <h2 className='card-title'>{props.title}</h2>
-            <span>
-                Date published: 
+            <div className="row">
+                <div className="col-md-10">
+                    <h2 className='card-title'>{props.title}</h2>
+                    <span>
+                        Date published:
                 <Moment format="YYYY-MM-DD">
-                    {props.date}
-                </Moment>
-            </span>
-            <p className='card-text'>
-                {props.teaser}
-                &nbsp; &nbsp;<a href={props.link} className='card-link'>... Read more</a>
-            </p>
+                            {props.date}
+                        </Moment>
+                    </span>
+                    <p className='card-text'>
+                        {props.teaser}
+                        &nbsp; &nbsp;<a href={props.link} className='card-link'>... Read more</a>
+                    </p>
+                </div>
+                <div className="col-md-2">
+                    {props.article === 'saved' ? <DeleteBtn handleDelete={props.handleDelete} id={props.id} className="btn btn-danger delete-btn" /> : <SaveBtn handleSubmit={props.handleSubmit} id={props.id} /> }
+                </div>
+            </div>
+            
             
             {props.article === 'saved' ?
                 <div className="container-fluid">
-                    <DeleteBtn  handleDelete={props.handleDelete} id={props.id} className="btn btn-danger delete-btn" />
                     <div className="row">
                         <div className="comment">
                             <h3>Note{props.savedNotes.length >1 ? `s` : ``}</h3>
@@ -44,12 +51,11 @@ const Card = props => (
                         </div>
                         <form>
                             <Input name="note" onChange={props.onChange} value={props.note} placeholder="write new note here.." />
-                            <FormBtn onClick={(event) => props.handleNewNote(props.id, event)} id={props.id} className="btn btn-success">Save Note</FormBtn>
                         </form>
                     </div>
                 </div>
                 :
-                <SaveBtn handleSubmit={props.handleSubmit} id={props.id}  />
+                null
             }
         </div>
     </div>
