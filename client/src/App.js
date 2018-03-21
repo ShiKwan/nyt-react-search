@@ -9,7 +9,6 @@ import './App.css';
 const App = () => (
   <Router>
     <div id="wrapper" style={{ backgroundImg: `url(${Background})`}} >
-      <Nav />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/news" component={Home} />

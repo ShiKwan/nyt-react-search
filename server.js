@@ -2,13 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const routes = require("./routes");
+const http = require('http');
 const app = express();
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const socketIO = require('socket.io');
 const PORT = process.env.PORT || 3001;
-
-
-server.listen(8000);
+/* 
+server.listen(8000); */
 
 
 // Configure body parser for AJAX requests
@@ -29,20 +28,23 @@ mongoose.connect(
   }
 );
 
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
 
+/* 
+
+ */
 
 /* const port = 8000; */
 /* io.listen(PORT);
 console.log('listening on port ', PORT);
  */
+const server = http.createServer(app);
+const io = socketIO(server);
 
-// Start the API server
-app.listen(PORT, function() {
-   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
+io.on('connection', socket =>{
+  socket.on("articleSaved", data =>{
+    socket.broadcast.emit("alertEveryone", `${data.user} said : "${data.title}!"`);
+  })
 });
+ // Start the API server
+server.listen(PORT, () => console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`););
+

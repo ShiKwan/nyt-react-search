@@ -4,8 +4,19 @@ import MsgCenter from "../../components/msgCenter";
 import Jumbotron from "../../components/Jumbotron";
 import Card from "../../components/Card";
 import { Input, FormBtn, DropDownList} from "../../components/Form";
+import Layout from "../../components/Layout";
+import openSocket from 'socket.io-client';
 
+
+const socket = openSocket('/');
 class Home extends Component {
+    constructor(props){
+        super(props);
+        socket.on("alertEveryone", message => {
+            console.log(message);
+        })
+
+    }
     state = {
         article :[],
         saved: [],
@@ -17,7 +28,9 @@ class Home extends Component {
         startYear: "",
         endYear: "",
         message : "",
+        
     }; 
+
     handleForSearch = event =>{
         event.preventDefault();
         if(!this.state.title) {
@@ -30,8 +43,10 @@ class Home extends Component {
             console.log("start year is empty)");
         }
         if (this.state.title) {
+            socket.emit('articleSaved', { "user": "SK", "title": "article found!" });
             API.getNews(this.state.title, this.state.startYear, this.state.endYear).then( res => {
             console.log("articles", res.data.response.docs);
+                
             this.setState({ article: res.data.response.docs });
             });             
         }else{
@@ -82,14 +97,32 @@ class Home extends Component {
        }
        console.log("New article: " , newArticle);
        API.saveArticle(newArticle)
-           .then(this.loadArticle());
+           .then( () => {
+               this.setState({
+                   message: "Article has been saved!",
+                   article: [],
+                   title: "",
+                   endYear: "",
+                   startYear: ""
+
+               })
+               setTimeout(() => {
+                   this.loadArticle()                   
+               }, 2000);
+            });
     };
     handleDelete = id => {
         console.log("here");
         API.deleteArticle(id)
             .then(res => { 
                 console.log(res);
-                this.loadArticle(); })
+                this.setState({
+                    message: "Saved article has been removed from the list."
+                })
+                setTimeout(() => {
+                    this.loadArticle();    
+                }, 2000);
+            })
         .catch(err => console.log(err))
     };
     handleClearResult = (event) => {
@@ -118,6 +151,7 @@ class Home extends Component {
     render(){
         return(
         <div>
+            <Layout />
             <Jumbotron>
                 
             </Jumbotron>

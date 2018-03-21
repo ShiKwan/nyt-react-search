@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import './Jumbotron.css';
-import Background from './images/New_York_Times_Logo.jpg';
+import Background from './images/nyt_banner.png';
 
 var jumbotronStyle = {
   backgroundSize : `contain`,
@@ -9,13 +10,15 @@ var jumbotronStyle = {
   height: 300,
   clear: `both`,
   backgroundImage: `url(${Background})`,
-  backgroundColor: `white`
+  backgroundColor: `inherit`
 }
 
 const Jumbotron = ({ children }) => (
-  <div style={jumbotronStyle} className="jumbotron container">
-    {children}
-  </div>
+  <Link to="/">
+    <div style={jumbotronStyle} className="jumbotron container">
+      {children}
+    </div>
+  </Link>
 );
 
 export default Jumbotron;
