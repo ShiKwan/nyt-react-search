@@ -17,11 +17,12 @@ const Card = props => (
             </span>
             <p className='card-text'>
                 {props.teaser}
+                &nbsp; &nbsp;<a href={props.link} className='card-link'>... Read more</a>
             </p>
-            <a href={props.link} className='card-link'>Read more</a>
+            
             {props.article === 'saved' ?
                 <div className="container-fluid">
-                    <DeleteBtn  handleDelete={props.handleDelete} id={props.id} />
+                    <DeleteBtn  handleDelete={props.handleDelete} id={props.id} className="btn btn-danger delete-btn" />
                     <div className="row">
                         <div className="comment">
                             <h3>Note{props.savedNotes.length >1 ? `s` : ``}</h3>
@@ -43,7 +44,7 @@ const Card = props => (
                         </div>
                         <form>
                             <Input name="note" onChange={props.onChange} value={props.note} placeholder="write new note here.." />
-                            <FormBtn onClick={(event) => props.handleNewNote(props.id, event)} id={props.id}>Save Note</FormBtn>
+                            <FormBtn onClick={(event) => props.handleNewNote(props.id, event)} id={props.id} className="btn btn-success">Save Note</FormBtn>
                         </form>
                     </div>
                 </div>

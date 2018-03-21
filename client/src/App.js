@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
+import Background from './background.jpeg';
+import './App.css';
 
 const App = () => (
   <Router>
-    <div>
+    <div id="wrapper" style={{ backgroundImg: `url(${Background})`}} >
       <Nav />
       <Switch>
         <Route exact path="/" component={Home} />

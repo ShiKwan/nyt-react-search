@@ -136,8 +136,8 @@ class Home extends Component {
                 <b>End Year (Optional):</b>
                     <Input onChange={this.handleChange} name='endYear' value={this.state.endYear}>
                 </Input>
-                    <FormBtn onClick={this.handleForSearch}>Search</FormBtn>
-                    <FormBtn onClick={() => this.handleClearResult}>Clear Results</FormBtn>
+                    <FormBtn onClick={this.handleForSearch} className="btn btn-success">Search</FormBtn>
+                    <FormBtn onClick={() => this.handleClearResult} className="btn btn-danger">Clear Results</FormBtn>
             </form>
             <div className="container">
                 {this.state.article.length > 0? <h1>News</h1> : ""}

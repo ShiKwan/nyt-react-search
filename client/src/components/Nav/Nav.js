@@ -1,7 +1,7 @@
 import React from "react";
 
 const Nav = () => (
-  <nav className="navbar navbar-inverse navbar-top">
+  <nav className="navbar navbar-top">
     <div className="container-fluid">
       <div className="navbar-header">
         <button type="button" className="collapsed navbar-toggle">
@@ -10,7 +10,7 @@ const Nav = () => (
           <span className="icon-bar" />
         </button>
         <a href="/" className="navbar-brand">
-          NYT Times News in REACT!!
+          <h1>React Built NYT Note Keeper</h1>
         </a>
       </div>
     </div>
