@@ -103,7 +103,7 @@ class Home extends Component {
                 })
                 setTimeout(() => {
                     this.loadArticle()
-                }, 2000);
+                }, 1000);
             });
     };
     handleDelete = id => {
@@ -116,7 +116,7 @@ class Home extends Component {
                 })
                 setTimeout(() => {
                     this.loadArticle();
-                }, 2000);
+                }, 1000);
             })
             .catch(err => console.log(err))
     };
@@ -138,6 +138,7 @@ class Home extends Component {
         })
             .then(res => {
                 console.log(res);
+                this.setState({note : ""});
                 this.loadArticle();
             })
     };
