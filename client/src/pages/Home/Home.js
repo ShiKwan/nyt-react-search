@@ -1,11 +1,12 @@
 import React, {Component} from "react";
-import ReactDOM from 'react-dom';
 import API from "../../utils/API";
 import MsgCenter from "../../components/msgCenter";
 import Jumbotron from "../../components/Jumbotron";
+import Notification from "../../components/Notification";
 import Card from "../../components/Card";
 import { Input, FormBtn, DropDownList} from "../../components/Form";
 import openSocket from 'socket.io-client';
+import "./Home.css";
 
 const socket = openSocket();
 
@@ -13,10 +14,16 @@ class Home extends Component {
     constructor(){
         super()
         socket.on("saved", message => {
+            const newNotification = this.state.notification;
+            newNotification.push(message);
             console.log(message);
+            this.setState({ notification: newNotification})
         });
         socket.on("scraped", message => {
+            const newNotification = this.state.notification;
+            newNotification.push(message);
             console.log(message);
+            this.setState({ notification: newNotification })
         })
     };
     
@@ -25,12 +32,14 @@ class Home extends Component {
         saved: [],
         _id: "",
         title: "",
+        numArticle: 5,
         date: "",
         teaser: "",
         note: "",
         startYear: "",
         endYear: "",
         message: "",
+        notification:[],
     };
 
     handleForSearch = event => {
@@ -49,7 +58,7 @@ class Home extends Component {
             API.getNews(this.state.title, this.state.startYear, this.state.endYear).then(res => {
                 console.log("articles", res.data.response.docs);
 
-                this.setState({ article: res.data.response.docs });
+                this.setState({ article: res.data.response.docs.slice(0, this.state.numArticle) });
             });
         } else {
             this.setState({ message: "Title cannot be empty" });
@@ -142,6 +151,13 @@ class Home extends Component {
             <Jumbotron>
                 
             </Jumbotron>
+            {this.state.notification ? 
+                <div className="notification-container">
+                    <Notification notification={this.state.notification} />
+                </div>
+            :
+                null
+            }
             {this.state.message ? <MsgCenter msg={this.state.message} className="text-center alert alert-danger" /> : ""}
             <form className="container">
                 <b>Search Term:</b>
@@ -149,7 +165,7 @@ class Home extends Component {
                     
                 </Input>
                 <b>Number of Records to Retrieve:</b>
-                <DropDownList li={[1,10,15]}></DropDownList>
+                <DropDownList name="numArticle" onChange={this.handleChange} li={[1,5,10]} SelectedValue={this.state.numArticle} value={this.state.numArticle}></DropDownList>
                 <b>Start Year (Optional):</b>
                     <Input onChange={this.handleChange} name='startYear' value={this.state.startYear}>
 
@@ -157,9 +173,10 @@ class Home extends Component {
                 <b>End Year (Optional):</b>
                     <Input onChange={this.handleChange} name='endYear' value={this.state.endYear}>
                 </Input>
-                    <FormBtn onClick={this.handleForSearch} className="btn btn-success">Search</FormBtn>
-                    <FormBtn onClick={() => this.handleClearResult} className="btn btn-danger">Clear Results</FormBtn>
+                    <FormBtn onClick={this.handleForSearch} className="btn btn-success" float="right">Search</FormBtn>
+                    <FormBtn onClick={() => this.handleClearResult} className="btn btn-danger" float="left">Clear Results</FormBtn>
             </form>
+            <br /><br />
             <div className="container">
                 {this.state.article.length > 0? <h1>News</h1> : ""}
                 {this.state.article.map(item => 
@@ -175,6 +192,7 @@ class Home extends Component {
                         handleSubmit = {this.handleFormSubmit}
                         /> 
                 )}
+                <br /><br />
                 {this.state.saved.length > 0 ? <h1>Saved Articles</h1> : ""}
                 {this.state.saved.map(item =>
                     <Card

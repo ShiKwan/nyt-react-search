@@ -39,13 +39,11 @@ io.on('connection', socket =>{
     io.sockets.emit("saved", `Article '${data.title}' has been saved!`);
   });
   socket.on("scraped", data => {
-    io.sockets.emit("scraped", `Someone has just scraped article related to ${data.title}`)
+    io.sockets.emit("scraped", `Someone has just scraped article related to '${data.title}'`)
   });
   socket.on('disconnect', () => {
     console.log('user disconnected');
-  });
-
-  
+  });  
 });
  // Start the API server
 server.listen(PORT, () => console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`));
