@@ -56,7 +56,7 @@ const Card = props => (
                             <form>
                                 <div className="form-group row">
                                     <div className='col-10'>
-                                        <Input style={{width: `100%`}} type='text' name="note" className='form-control' aria-label='new note' onChange={props.onChange} value={props.note} placeholder="write new note here.." />
+                                        <Input style={{width: `100%`}} type='text' name="note" className='form-control' aria-label='new note' onChange={props.onChange} placeholder="write new note here.." />
                                     </div>
                                     <div className="col-2">
                                         <FormBtn onClick={(event) => props.handleNewNote(props.id, event)} float='right' className="btn btn-success" id={props.id}>Save Note</FormBtn>

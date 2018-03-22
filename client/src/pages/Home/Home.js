@@ -77,7 +77,7 @@ class Home extends Component {
         API.getArticles()
             .then(res => {
                 console.log("load article", res);
-                this.setState({ saved: res.data, title: "", endYear: "", startYear: "", date: "", teaser: "", message: "" });
+                this.setState({ saved: res.data, title: "", endYear: "", startYear: "", date: "", teaser: "", message: "", note: "" });
             })
             .catch(err => console.log(err))
     };
@@ -138,8 +138,8 @@ class Home extends Component {
         })
             .then(res => {
                 console.log(res);
-                this.setState({note : ""});
                 this.loadArticle();
+                this.setState({ note: "" });
             })
     };
     componentDidMount(){

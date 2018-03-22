@@ -1,42 +1,25 @@
-# Create React Express App
+# NYT Article Search in ReactJS
 
-## About This Boilerplate
+[NYT Article Search Web Application](https://secret-fortress-69917.herokuapp.com/)
 
-This setup allows for a Node/Express/React app which can be easily deployed to Heroku.
+## Technologies applied:
+..* ReactJS
+..* Socket IO/
+..* Express
+..* MongoDB
+..* Bootstrap 4 Framework
 
-The front-end React app will auto-reload as it's updated via webpack dev server, and the backend Express app will auto-reload independently with nodemon.
+## Description
+This single-page application allow users to query NYT News API with 3 filters
+    1. number of article return (1, 5, or 10 articles)
+    2. start year 
+    3. end year
 
-## Starting the app locally
+Once articles are scraped, users can browse through the article list, clicking on "read more" will direct users to NYT article page to finish reading the article. 
+Users can choose to save favorite articles into database by clicking on 'Save Article' button on the right side of the article.
 
-Start by installing front and backend dependencies. While in this directory, run the following commands:
+After an article is saved, an alert would pop up on top of the jumbotron, and the saved article will now show in Saved Articles section. 
 
-```
-yarn install
-cd client
-yarn install
-cd ..
-``
+User are allow to write note about saved articles by simply typing in the textbox and click 'Save Note' button. 
 
-After both installations complete, run the following command in your terminal:
-
-```
-yarn start
-```
-
-That's it, your app should be running on <http://localhost:3000>. The Express server should intercept any AJAX requests from the client.
-
-## Deployment (Heroku)
-
-After confirming that you have an up to date git repository and a Heroku app created, complete the following:
-
-1. Build the React app for production by running the following command:
-
-```
-yarn build
-```
-
-2. Add and commit all changes to git
-
-3. Push to Heroku
-
-If all previous steps were followed correctly, your application should be deployed to Heroku!
+This application is hooked with socket IO, if other parties that are browsing concurrently with you saved a note or perform a search, notifications (latest five) will appear on the bottom right of the application. 

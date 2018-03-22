@@ -46,14 +46,6 @@ export default {
       API_KEY + "&q=" + title + date;
     return axios.get(queryURL);
   },
-
-  getNews2: function(objParams){
-    objParams.API_Key = '7efd7705bed343d498f6b717ffda6638';
-    console.log(objParams);
-    return axios.get("https://api.nytimes.com/svc/search/v2/articlesearch.json", {
-      objParams
-    });
-  },
   saveNote: function(id, obj) {
     console.log("API : here")
     return axios.post('/api/notes/' +id, obj);
